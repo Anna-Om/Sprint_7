@@ -9,16 +9,17 @@ from http import HTTPStatus
 class TestCreateCourier:
     @allure.title('Тест создания курьера')
     @allure.description('Проверка создания курьера')
-    def test_create_courier_account_created(self):
-        couirer = register_new_courier_and_return_login_password()
-        response = requests.post(Urls.URL_CREATE_COURIER, data=courier_payload)
+    def test_create_courier_account_created(self, courier):
+        #couirer = register_new_courier_and_return_login_password()
+        response = requests.post(Urls.URL_CREATE_COURIER, data=courier)
         assert response.status_code == HTTPStatus.CREATED and response.json() == {'ok': True}
 
+
     @allure.title('Неуспешное создание курьера с теми же введденными повторно')
-    def test_create_duplicate_courier(self):
-        couirer_payload = register_new_courier_with_static_data()
-        requests.post(Urls.URL_CREATE_COURIER, data=courier_payload)
-        second_response = requests.post(Urls.URL_CREATE_COURIER, data=courier_payload)
+    def test_create_duplicate_courier(self, courier):
+        #couirer_payload = register_new_courier_with_static_data()
+        requests.post(Urls.URL_CREATE_COURIER, data=courier)
+        second_response = requests.post(Urls.URL_CREATE_COURIER, data=courier)
         assert (second_response.status_code == HTTPStatus.CONFLICT and
                 second_response.json() == TestData.MESSAGE_CONFLICT)
 
